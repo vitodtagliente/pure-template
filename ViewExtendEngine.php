@@ -1,6 +1,6 @@
 <?php
 
-namespace Pure\View;
+namespace Pure\Template;
 
 /*
 	implements the view's extension capability

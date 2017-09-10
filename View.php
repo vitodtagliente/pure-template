@@ -1,6 +1,6 @@
 <?php
 
-namespace Pure\View;
+namespace Pure\Template;
 
 class View
 {

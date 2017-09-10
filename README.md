@@ -1,15 +1,15 @@
-# Pure View Component
+# Pure Template Component
 Simple and fast template engine
 # How To render a view
 1. Define the default path in which the engine will search for view files:
     ```php
-    Pure\View\View::path( $default_path );
+    Pure\Template\View::path( $default_path );
     ```
 2. Instantiate a view object:
     ```php
-    $view = new Pure\View\View();
+    $view = new Pure\Template\View();
     // or
-    $view = new Pure\View\View(
+    $view = new Pure\Template\View(
         array('param1' => 'value1', ... , 'paramN' => 'valueN')
     );
     ```
@@ -25,14 +25,14 @@ Simple and fast template engine
 5. Render the output:
     ```php
     $view->render(
-        $filename, // the file palced inside of Pure\View\View::path()
+        $filename, // the file palced inside of Pure\Template\View::path()
         $direct_output = true, // if true, the output is displayed
         $dont_compute = false // if true, no engine extensions are applied
     );
     ```
 7. Instead of instantiate the view object, it is possibile to directly output a view by a static function:
     ```php
-    Pure\View\View::make(
+    Pure\Template\View::make(
         $filename,
         $params = array(),
         $direct_output = true,
@@ -53,7 +53,7 @@ Simple and fast template engine
     ```
 2. Render the view:
     ```php
-    use Pure\View\View;
+    use Pure\Template\View;
 
     // Set the default path
     View::path('views');
@@ -93,7 +93,7 @@ If during the render phase, the argument $dont_compute is set to false, the view
     </body>
     ```
 # How To extend views
-Another Pure View extension let to extend views and override contents.
+Another Pure Template extension let to extend views and override contents.
 1. To extend a view:
     ```php
     @extends('view_filename')
@@ -140,5 +140,3 @@ Another Pure View extension let to extend views and override contents.
     </body>
     </html>
     ```
-
-    

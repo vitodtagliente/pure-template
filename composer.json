@@ -1,6 +1,6 @@
 {
-    "name": "vitodtagliente/pure-view",
-    "description": "The Pure View Component",
+    "name": "vitodtagliente/pure-template",
+    "description": "The Pure Template Component",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "Pure\\View\\": ""
+            "Pure\\Template\\": ""
         }
     },
     "config": {
