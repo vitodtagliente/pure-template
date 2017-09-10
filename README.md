@@ -1,2 +1,96 @@
-# pure-view
-The Pure View Component
+# Pure View Component
+Simple and fast template engine
+# How To render a view
+1. Define the default path in which the engine will search for view files:
+    ```php
+    Pure\View\View::path( $default_path );
+    ```
+2. Instantiate a view object:
+    ```php
+    $view = new Pure\View\View();
+    // or
+    $view = new Pure\View\View(
+        array('param1' => 'value1', ... , 'paramN' => 'valueN')
+    );
+    ```
+3. Set params:
+    ```php
+    $view->paramJ = 'valueJ';
+    ```
+    In this way it is possibile to define other parameters outside the default constructor.
+4. Clear params:
+    ```php
+    $view->clear();
+    ```
+5. Render the output:
+    ```php
+    $view->render(
+        $filename, // the file palced inside of Pure\View\View::path()
+        $direct_output = true, // if true, the output is displayed
+        $dont_compute = false // if true, no engine extensions are applied
+    );
+    ```
+7. Instead of instantiate the view object, it is possibile to directly output a view by a static function:
+    ```php
+    Pure\View\View::make(
+        $filename,
+        $params = array(),
+        $direct_output = true,
+        $dont_compute = false
+    );
+    ```
+#### Let me show an example:
+1. Define a view in path: views/example.php
+    ```html
+    <html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <?php echo $foo; ?>
+    </body>
+    </html>
+    ```
+2. Render the view:
+    ```php
+    use Pure\View\View;
+
+    // Set the default path
+    View::path('views');
+
+    $view = new View();
+    $view->foo = "Hello View!"; // set the param foo
+    $result = $view->render('example.php');
+    ```
+3. The output will be this:
+    ```html
+    <html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        Hello View!
+    </body>
+    </html>
+    ```
+# How To avoid <?php ?> inline calls:
+In the last example we used
+```html
+<body>
+    <?php echo $foo; ?>
+</body>
+```
+to render the foo variable, which is defined as:
+```php
+$view = new View();
+$view->foo = "Hello View!"; // set the param foo
+```
+If during the render phase, the argument $dont_compute is set to false, the view engine extensions are called. Which means that more features are available.
+1. Render paramas in fast way:
+    ```html
+    <body>
+        {{ $foo }}
+    </body>
+    ```
+2. Call functions:
+    

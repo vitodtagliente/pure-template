@@ -1,0 +1,22 @@
+{
+    "name": "vitodtagliente/pure-view",
+    "description": "The Pure View Component",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vito Domenico Tagliente",
+            "email": "vitodomenicotagliente@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Pure\\Router\\": ""
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
