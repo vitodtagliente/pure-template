@@ -73,7 +73,7 @@ Simple and fast template engine
     </body>
     </html>
     ```
-# How To avoid <?php ?> inline calls:
+# How To avoid <?php ?> inline calls
 In the last example we used
 ```html
 <body>
@@ -92,5 +92,53 @@ If during the render phase, the argument $dont_compute is set to false, the view
         {{ $foo }}
     </body>
     ```
-2. Call functions:
+# How To extend views
+Another Pure View extension let to extend views and override contents.
+1. To extend a view:
+    ```php
+    @extends('view_filename')
+    ```
+    the @extends must be the first statement
+2. Sections have to be defined in parent view:
+    ```php
+    @section('section_name')
+    ```
+3. Sections can be override as follow:
+    ```php
+    @begin('section_name')
+    <h1> HTML content </h1>
+    @end
+    ```
+#### Let me show an example:
+1. Define a parent template placed in views/template.php
+    ```html
+    <html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        @section('content')
+    </body>
+    </html>
+    ```
+2. Define a new view derived by this template:
+    ```php
+    @extends('template.php')
+
+    @begin('content')
+    <p>Hello View!</p>
+    @end
+    ```
+3. The output will be this:
+    ```html
+    <html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <p>Hello View</p>
+    </body>
+    </html>
+    ```
+
     
