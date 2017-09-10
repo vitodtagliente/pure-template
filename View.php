@@ -71,7 +71,7 @@ class View
 
     public static function make( $filename, $params = array(), $direct_output = true, $dont_compute = false ){
         $view = new View( $params );
-        return $view->render( self::$path . "/$filename", $direct_output, $dont_compute );
+        return $view->render( $filename, $direct_output, $dont_compute );
 
     }
 
