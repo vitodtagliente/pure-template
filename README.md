@@ -3,8 +3,9 @@ Simple and fast template engine
 # How To render a view
 1. Define the default path in which the engine will search for view files:
     ```php
-    Pure\Template\View::path( $default_path );
+    Pure\Template\View::namespace( $default_path );
     ```
+
 2. Instantiate a view object:
     ```php
     $view = new Pure\Template\View();
@@ -13,24 +14,28 @@ Simple and fast template engine
         array('param1' => 'value1', ... , 'paramN' => 'valueN')
     );
     ```
+
 3. Set params:
     ```php
     $view->paramJ = 'valueJ';
     ```
     In this way it is possibile to define other parameters outside the default constructor.
+
 4. Clear params:
     ```php
     $view->clear();
     ```
+
 5. Render the output:
     ```php
     $view->render(
-        $filename, // the file palced inside of Pure\Template\View::path()
-        $direct_output = true, // if true, the output is displayed
-        $dont_compute = false // if true, no engine extensions are applied
+        $filename,              // the file palced inside the base path
+        $direct_output = true,   // if true, the output is displayed
+        $dont_compute = false    // if true, no engine extensions are applied
     );
     ```
-7. Instead of instantiate the view object, it is possibile to directly output a view by a static function:
+
+6. Instead of instantiate the view object, it is possibile to directly output a view by a static function:
     ```php
     Pure\Template\View::make(
         $filename,
@@ -39,7 +44,32 @@ Simple and fast template engine
         $dont_compute = false
     );
     ```
-#### Let me show an example:
+
+7. How to locate views in different paths and render them using namespaces
+
+    It is possible to define several namespaces, each namespace refers to a certain path
+
+    ```php
+    Pure\Template\View::namespace('path/views');                // define the base namespace
+    Pure\Template\View::namespace('path/views/auth', 'auth');    // define the auth namespace
+    ```
+
+    Once the namespaces are defined, it is possible to load views using the syntax 
+
+    ```php
+    "namespace::view_filename"
+    ```
+
+    For example:
+
+    ```php
+    Pure\Template\View::make('welcome.php');        // file: path/views/welcome.php
+    Pure\Template\View::make('auth::login.php');    // file: path/views/auth/login.php
+    ```
+
+
+##### Simple example
+
 1. Define a view in path: views/example.php
     ```html
     <html>
@@ -54,10 +84,10 @@ Simple and fast template engine
 2. Render the view:
     ```php
     use Pure\Template\View;
-
+    
     // Set the default path
-    View::path('views');
-
+    View::namespace('views');
+    
     $view = new View();
     $view->foo = "Hello View!"; // set the param foo
     $result = $view->render('example.php');
@@ -73,7 +103,10 @@ Simple and fast template engine
     </body>
     </html>
     ```
+
+
 # How To avoid <?php ?> inline calls
+
 In the last example we used
 ```html
 <body>
@@ -92,7 +125,10 @@ If during the render phase, the argument $dont_compute is set to false, the view
         {{ $foo }}
     </body>
     ```
+
+
 # How To extend views
+
 Another Pure Template extension let to extend views and override contents.
 1. To extend a view:
     ```php
@@ -109,7 +145,10 @@ Another Pure Template extension let to extend views and override contents.
     <h1> HTML content </h1>
     @end
     ```
-#### Let me show an example:
+
+
+##### Practical example
+
 1. Define a parent template placed in views/template.php
     ```html
     <html>
@@ -124,7 +163,7 @@ Another Pure Template extension let to extend views and override contents.
 2. Define a new view derived by this template:
     ```php
     @extends('template.php')
-
+    
     @begin('content')
     <p>Hello View!</p>
     @end
