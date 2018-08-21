@@ -15,17 +15,15 @@ class ViewScriptEngine extends ViewEngine {
             $__pure_view_r = str_replace( '{{', '', $__pure_view_rule );
             $__pure_view_r = str_replace( '}}', '', $__pure_view_r );
             $__pure_view_r = trim( $__pure_view_r );
+			$__pure_view_r = trim( $__pure_view_r, ';' );
 
-            $__pure_words_count = str_word_count( $__pure_view_r );
+			$__pure_view_value = null;
 
-            if( $__pure_words_count == 1 && strpos($__pure_view_r, '$') === 0 ){
-            	// it's a single word, one variable
-            	// try to replace it using eval
-            	$__pure_view_r = rtrim( $__pure_view_r, ';' );
+			// it is a single variable
+			if(strpos($__pure_view_r, '$') === 0){
+				$__pure_view_value = eval("return $__pure_view_r;");
 
-            	$__pure_view_value = eval("return $__pure_view_r;");
-
-            	// if eval fails
+				// if eval fails
 				// try to find a match with view's params
 				if ($__pure_view_value == null){
 
@@ -36,12 +34,16 @@ class ViewScriptEngine extends ViewEngine {
 							$__pure_view_value = $__pure_value;
 					}
 				}
-            }
-            else {
-            	// eval the rule
-            	// TODO: exception handler
-				//$__pure_view_value = eval($__pure_view_r);
-            }
+			}
+			else
+			{
+				$__pure_view_value = eval("$__pure_view_r;");
+				if($__pure_view_value === null)
+				{
+					// it is a void function
+					$__pure_view_value = eval("return $__pure_view_r;");
+				}
+			}
 
             $__pure_view_content = str_replace( $__pure_view_rule, $__pure_view_value, $__pure_view_content );
         }
