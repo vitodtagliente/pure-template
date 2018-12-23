@@ -5,49 +5,55 @@ namespace Pure\Template;
 class ViewScriptEngine extends ViewEngine {
 
 	// Map php functions and variables
+	function map($view_content, $view_params = array())
+	{
+		// trova tutte le regole racchiuse tra doppie graffe
+		$rules = ViewUtility::find_rules($view_content, '{{', '}}');
 
-	function map( $__pure_view_content, $__pure_view_params = array() ){
+        foreach ($rules as $rule) 
+        {
+        	// estrapola la parte di codice racchiusa
+            $rule_code = str_replace('{{', '', $rule);
+            $rule_code = str_replace('}}', '', $rule_code);
+            $rule_code = trim($rule_code);
+			$rule_code = trim($rule_code, ';');
 
-		$__pure_view_rules = $this->findRules( $__pure_view_content, '{{', '}}' );
+			// memorizza qui l'esito dell'elaborazione
+			$rule_code_value = null;
 
-        foreach ($__pure_view_rules as $__pure_view_rule) {
-        	// trim each rule
-            $__pure_view_r = str_replace( '{{', '', $__pure_view_rule );
-            $__pure_view_r = str_replace( '}}', '', $__pure_view_r );
-            $__pure_view_r = trim( $__pure_view_r );
-			$__pure_view_r = trim( $__pure_view_r, ';' );
-
-			$__pure_view_value = null;
-
-			// it is a single variable
-			if(strpos($__pure_view_r, '$') === 0){
-				$__pure_view_value = eval("return $__pure_view_r;");
-
-				// if eval fails
-				// try to find a match with view's params
-				if ($__pure_view_value == null){
-
-					$__pure_view_r = ltrim( $__pure_view_r, '$' );
-
-					foreach ($__pure_view_params as $__pure_key => $__pure_value) {
-						if($__pure_key == $__pure_view_r)
-							$__pure_view_value = $__pure_value;
+			// se è una sola parola
+			// presumibilmente è una variabile
+			// in tal caso, esegui la stampa del valore
+			if(strpos($rule_code, '$') === 0)
+			{
+				// cerca tra i parametri della vista
+				if ($rule_code_value == null)
+				{
+					$rule_code_variable = ltrim($rule_code, '$');
+					foreach ($view_params as $param_key => $param_value) 
+					{
+						if($param_key == $rule_code_variable)
+						{
+							$rule_code_value = $param_value;
+							break;
+						}
 					}
 				}
 			}
 			else
 			{
-				$__pure_view_value = eval("$__pure_view_r;");
-				if($__pure_view_value === null)
+				// si tratta di una funzione presumibilmente
+				$rule_code_value = eval("$rule_code;");
+				if($rule_code_value == null)
 				{
 					// it is a void function
-					$__pure_view_value = eval("return $__pure_view_r;");
+					$rule_code_value = eval("return $rule_code;");
 				}
 			}
 
-            $__pure_view_content = str_replace( $__pure_view_rule, $__pure_view_value, $__pure_view_content );
+            $view_content = str_replace($rule, $rule_code_value, $view_content);
         }
-        return $__pure_view_content;
+        return $view_content;
 
 	}
 }
