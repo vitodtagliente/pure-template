@@ -80,6 +80,11 @@ class View
                     $filename = self::$namespaces[$parts[0]] . '/' . $parts[1];
             }
         }
+        else 
+        {
+            if(isset(self::$namespaces['::']))
+                $filename = self::$namespaces['::'] . "/$filename";
+        }
         return $filename;
     }
 
@@ -96,7 +101,7 @@ class View
         ob_start();
         include($this->filename);
         $content = ob_get_contents();
-        ob_end_clean();      
+        ob_end_clean();    
 
         // view engines
         foreach($this->engines as $key => $engine)
